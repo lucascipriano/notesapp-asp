@@ -34,11 +34,10 @@ class EditNotePage extends StatelessWidget {
           ),
           IconButton(
             onPressed: () async {
-              // Chama o _alertDelet e espera o retorno da confirmação
               final confirm = await _alertDelet(context, note.id);
 
-              // Verifica se o retorno foi true para executar a ação desejada
               if (confirm == true) {
+                // ignore: use_build_context_synchronously
                 Routefly.pop(context);
               }
             },
@@ -47,12 +46,19 @@ class EditNotePage extends StatelessWidget {
         ],
       ),
       body: Container(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(0.0),
         child: Column(
           children: [
             TextField(
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               controller: titleController,
-              decoration: const InputDecoration(labelText: 'Title'),
+              decoration: InputDecoration(
+                hintText: "Title",
+                border: OutlineInputBorder(
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(0),
+                ),
+              ),
             ),
             TextField(
               controller: contentController,
@@ -63,11 +69,11 @@ class EditNotePage extends StatelessWidget {
               maxLines: 20,
               decoration: InputDecoration(
                 fillColor:
-                    const Color.fromARGB(255, 120, 119, 117).withAlpha(75),
+                    const Color.fromARGB(255, 120, 119, 117).withAlpha(10),
                 filled: true,
                 border: OutlineInputBorder(
                   borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.circular(8.0),
+                  borderRadius: BorderRadius.circular(0),
                 ),
                 hintText: "Write Notes",
               ),
