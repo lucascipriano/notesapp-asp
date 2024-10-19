@@ -82,8 +82,12 @@ class HomeContent extends StatelessWidget {
       body: AtomBuilder(
         builder: (_, get) {
           final notes = get(todoState); // Obtém a lista atualizada de notas
-          return _buildNotesBody(
-              context, notes); // Atualiza o corpo com a nova lista
+          if (notes.isEmpty) {
+            return _buildEmptyNotesBody(); // Chama a função para notas vazias
+          } else {
+            return _buildNotesBody(
+                context, notes); // Chama a função para exibir as notas
+          }
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -154,8 +158,39 @@ Widget _buildNotesBody(BuildContext context, List<NotesModel> notes) {
           onTap: () {
             Routefly.push(routePaths.editNote, arguments: note);
           },
+          trailing: IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () {
+              _confirmDelete(context, note.id);
+              // Chama a função de confirmação de exclusão
+            },
+          ),
         ),
       );
     },
+  );
+}
+
+void _confirmDelete(BuildContext context, int noteId) async {
+  // Exibe o diálogo de confirmação
+  final confirm = await showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Confirm Deletion'),
+      content: const Text('Are you sure you want to delete this note?'),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(false),
+          child: const Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () {
+            deleteAction(noteId); // Chama a função de exclusão
+            Navigator.of(context).pop(true); // Fecha o diálogo após confirmar
+          },
+          child: const Text('Delete'),
+        ),
+      ],
+    ),
   );
 }

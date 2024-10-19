@@ -39,3 +39,13 @@ final putAction = atomAction1<NotesModel>((set, model) {
     set(todoState, updatedTodos);
   }
 });
+
+final deleteAction = atomAction1<int>((set, id) {
+  final currentTodos = todoState.state;
+
+  // Remove o TodoModel com o id especificado
+  final updatedTodos = currentTodos.where((todo) => todo.id != id).toList();
+
+  // Atualiza o estado com a lista modificada
+  set(todoState, updatedTodos);
+});

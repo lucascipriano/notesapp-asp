@@ -33,6 +33,14 @@ class EditNotePage extends StatelessWidget {
             },
             icon: const Icon(Icons.save),
           ),
+          IconButton(
+            onPressed: () {
+              deleteAction(note.id);
+              Navigator.pop(context);
+              // Retorna a nota atualizada para HomePage
+            },
+            icon: const Icon(Icons.delete),
+          ),
         ],
       ),
       body: Padding(
