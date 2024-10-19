@@ -9,7 +9,6 @@ class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Notes App',
       debugShowCheckedModeBanner: false,
       routerConfig: Routefly.routerConfig(
         routes: routes,

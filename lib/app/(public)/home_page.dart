@@ -51,13 +51,22 @@ class HomeContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Switch(
-            value: _themeManager.themeData == ThemeMode.dark,
-            onChanged: (value) {
-              _themeManager.toggleTheme(value);
-            }),
+      appBar: AppBar(
+        title: const Text('Notes'),
+        actions: [
+          Row(
+            children: [
+              Switch(
+                value: _themeManager.themeData == ThemeMode.dark,
+                onChanged: (value) {
+                  _themeManager.toggleTheme(value);
+                },
+              ),
+            ],
+          )
+        ],
       ),
+      body: const Center(child: Text('Home')),
     );
   }
 }
