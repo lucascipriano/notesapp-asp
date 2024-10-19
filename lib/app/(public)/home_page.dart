@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:notesapp/app/theme/theme_constants.dart';
 import 'package:notesapp/app/theme/theme_manager.dart';
 
@@ -56,17 +57,53 @@ class HomeContent extends StatelessWidget {
         actions: [
           Row(
             children: [
-              Switch(
-                value: _themeManager.themeData == ThemeMode.dark,
-                onChanged: (value) {
-                  _themeManager.toggleTheme(value);
+              IconButton(
+                icon: Icon(
+                  _themeManager.themeData == ThemeMode.dark
+                      ? Icons.wb_sunny // Ícone para tema claro
+                      : Icons.nights_stay, // Ícone para tema escuro
+                ),
+                onPressed: () {
+                  _themeManager
+                      .toggleTheme(_themeManager.themeData == ThemeMode.light);
                 },
               ),
             ],
           )
         ],
       ),
-      body: const Center(child: Text('Home')),
+      body: Column(
+        children: [
+          Container(
+              margin: const EdgeInsets.only(top: 50),
+              width: 400,
+              height: 400,
+              child: Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(top: 50),
+                    child: const Text(
+                      'Create your first note !',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 300,
+                    height: 300,
+                    child: Lottie.asset(
+                      'lottie/empty.json',
+                      fit: BoxFit.contain,
+                    ),
+                  )
+                ],
+              )),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        shape: const CircleBorder(),
+        onPressed: () {},
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

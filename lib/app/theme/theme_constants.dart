@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-const primaryColor = Colors.deepPurple;
-const secondColor = Colors.purple;
+const Color buttonCor = Color(0xFF252525);
+
+const primaryColor = Colors.white;
+const secondColor = Colors.grey;
 
 ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
@@ -24,11 +26,12 @@ ThemeData lightTheme = ThemeData(
     ),
   ),
 );
+
 ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
   primaryColor: secondColor,
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
-    backgroundColor: secondColor,
+    backgroundColor: buttonCor,
   ),
   textTheme: const TextTheme(
     titleSmall: TextStyle(

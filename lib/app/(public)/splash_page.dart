@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:notesapp/routes.g.dart';
 import 'package:routefly/routefly.dart';
 
@@ -13,16 +14,16 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(milliseconds: 2300), () {
       Routefly.navigate(routePaths.home);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return const Material(
+    return Material(
       child: Center(
-        child: Text('Splash art bolada'),
+        child: Lottie.asset('lottie/hello_animate.json'),
       ),
     );
   }
