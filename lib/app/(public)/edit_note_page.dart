@@ -5,7 +5,7 @@ import 'package:notesapp/app/interactor/models/notes_model.dart';
 class EditNotePage extends StatelessWidget {
   final NotesModel note;
 
-  const EditNotePage({Key? key, required this.note}) : super(key: key);
+  const EditNotePage({super.key, required this.note});
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +25,9 @@ class EditNotePage extends StatelessWidget {
                 content: contentController.text,
               );
 
-              // Chama a ação para salvar a nota
               putAction(updatedNote);
 
-              // Retorna para a página anterior
-              Navigator.pop(context); // Retorna a nota atualizada para HomePage
+              Navigator.pop(context);
             },
             icon: const Icon(Icons.save),
           ),
@@ -37,13 +35,12 @@ class EditNotePage extends StatelessWidget {
             onPressed: () {
               deleteAction(note.id);
               Navigator.pop(context);
-              // Retorna a nota atualizada para HomePage
             },
             icon: const Icon(Icons.delete),
           ),
         ],
       ),
-      body: Padding(
+      body: Container(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
@@ -53,7 +50,21 @@ class EditNotePage extends StatelessWidget {
             ),
             TextField(
               controller: contentController,
-              decoration: const InputDecoration(labelText: 'Content'),
+              scrollPadding: const EdgeInsets.only(bottom: 10),
+              keyboardType: TextInputType.multiline,
+              minLines: 5,
+              maxLength: 1000,
+              maxLines: 20,
+              decoration: InputDecoration(
+                fillColor:
+                    const Color.fromARGB(255, 120, 119, 117).withAlpha(75),
+                filled: true,
+                border: OutlineInputBorder(
+                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                hintText: "Write Notes",
+              ),
             ),
             // Adicione outros elementos de UI se necessário
           ],

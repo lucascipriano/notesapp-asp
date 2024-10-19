@@ -154,7 +154,11 @@ Widget _buildNotesBody(BuildContext context, List<NotesModel> notes) {
             note.title,
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
-          subtitle: Text(note.content),
+          subtitle: Text(
+            note.content,
+            maxLines: 3,
+            overflow: TextOverflow.ellipsis,
+          ),
           onTap: () {
             Routefly.push(routePaths.editNote, arguments: note);
           },
@@ -162,7 +166,6 @@ Widget _buildNotesBody(BuildContext context, List<NotesModel> notes) {
             icon: const Icon(Icons.delete),
             onPressed: () {
               _confirmDelete(context, note.id);
-              // Chama a função de confirmação de exclusão
             },
           ),
         ),
@@ -173,6 +176,8 @@ Widget _buildNotesBody(BuildContext context, List<NotesModel> notes) {
 
 void _confirmDelete(BuildContext context, int noteId) async {
   // Exibe o diálogo de confirmação
+
+  // ignore: unused_local_variable
   final confirm = await showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
