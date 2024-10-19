@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:notesapp/app/interactor/actions/notes_actions.dart';
 import 'package:notesapp/app/interactor/atom/notes_atom.dart';
+import 'package:notesapp/app/interactor/models/notes_model.dart';
 import 'package:notesapp/app/theme/theme_constants.dart';
 import 'package:notesapp/app/theme/theme_manager.dart';
 
@@ -81,7 +82,7 @@ class HomeContent extends StatelessWidget {
           final notes = todoState.state; // Acesse o estado das notas
           return notes.isEmpty
               ? _buildEmptyNotesBody()
-              : _buildNotesBody(notes);
+              : _buildNotesBody(context, notes);
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -127,21 +128,24 @@ Widget _buildEmptyNotesBody() {
   );
 }
 
-Widget _buildNotesBody(List notes) {
+Widget _buildNotesBody(BuildContext context, List<NotesModel> notes) {
   return ListView.builder(
     itemCount: notes.length,
     itemBuilder: (_, index) {
       final note = notes[index];
-      // Aqui você pode renderizar o seu note como desejar
-      return ListTile(
-        title: Text(
-          note.title,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-        ), // Exiba o título da nota
-        subtitle: Text(note.content), // Exiba o conteúdo da nota, se disponível
-        onTap: () {
-          // Aqui você pode adicionar a lógica para abrir uma nota, se necessário
-        },
+      return Container(
+        margin: const EdgeInsets.symmetric(
+            vertical: 8.0), // Espaçamento vertical entre os itens
+        child: ListTile(
+          title: Text(
+            note.title,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
+          subtitle: Text(note.content),
+          onTap: () {
+            // Lógica para abrir a nota, se necessário
+          },
+        ),
       );
     },
   );
