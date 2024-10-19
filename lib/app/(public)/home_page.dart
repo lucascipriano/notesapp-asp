@@ -6,6 +6,8 @@ import 'package:notesapp/app/interactor/atom/notes_atom.dart';
 import 'package:notesapp/app/interactor/models/notes_model.dart';
 import 'package:notesapp/app/theme/theme_constants.dart';
 import 'package:notesapp/app/theme/theme_manager.dart';
+import 'package:notesapp/routes.g.dart';
+import 'package:routefly/routefly.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -143,7 +145,7 @@ Widget _buildNotesBody(BuildContext context, List<NotesModel> notes) {
           ),
           subtitle: Text(note.content),
           onTap: () {
-            // Lógica para abrir a nota, se necessário
+            Routefly.push(routePaths.editNote, arguments: note);
           },
         ),
       );
