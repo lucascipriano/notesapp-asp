@@ -81,15 +81,22 @@ class HomeContent extends StatelessWidget {
       ),
       body: AtomBuilder(
         builder: (_, get) {
-          final notes = todoState.state; // Acesse o estado das notas
-          return notes.isEmpty
-              ? _buildEmptyNotesBody()
-              : _buildNotesBody(context, notes);
+          final notes = get(todoState); // Obtém a lista atualizada de notas
+          return _buildNotesBody(
+              context, notes); // Atualiza o corpo com a nova lista
         },
       ),
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
-        onPressed: () {},
+        onPressed: () async {
+          final newNote = NotesModel(id: -1, title: '', content: '');
+          final result =
+              await Routefly.push(routePaths.editNote, arguments: newNote);
+          if (result != null) {
+            // Aqui, result é a nota que foi salva
+            putAction(result); // Adiciona a nova nota ao estado
+          }
+        },
         child: const Icon(Icons.add),
       ),
     );
