@@ -1,5 +1,8 @@
+import 'package:asp/asp.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:notesapp/app/interactor/actions/notes_actions.dart';
+import 'package:notesapp/app/interactor/atom/notes_atom.dart';
 import 'package:notesapp/app/theme/theme_constants.dart';
 import 'package:notesapp/app/theme/theme_manager.dart';
 
@@ -17,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     _themeManager.addListener(themeListner);
     super.initState();
+    fetchnotes();
   }
 
   @override
@@ -72,32 +76,13 @@ class HomeContent extends StatelessWidget {
           )
         ],
       ),
-      body: Column(
-        children: [
-          Container(
-              margin: const EdgeInsets.only(top: 50),
-              width: 400,
-              height: 400,
-              child: Column(
-                children: [
-                  Container(
-                    margin: const EdgeInsets.only(top: 50),
-                    child: const Text(
-                      'Create your first note !',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 300,
-                    height: 300,
-                    child: Lottie.asset(
-                      'lottie/empty.json',
-                      fit: BoxFit.contain,
-                    ),
-                  )
-                ],
-              )),
-        ],
+      body: AtomBuilder(
+        builder: (_, get) {
+          final notes = todoState.state; // Acesse o estado das notas
+          return notes.isEmpty
+              ? _buildEmptyNotesBody()
+              : _buildNotesBody(notes);
+        },
       ),
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
@@ -106,4 +91,58 @@ class HomeContent extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget _buildEmptyNotesBody() {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center, // Centraliza o conteúdo
+      children: [
+        Container(
+          margin: const EdgeInsets.only(top: 50),
+          width: 400,
+          height: 400,
+          child: Column(
+            children: [
+              Container(
+                margin: const EdgeInsets.only(top: 50),
+                child: const Text(
+                  'Create your first note!',
+                  style: TextStyle(fontSize: 20),
+                ),
+              ),
+              SizedBox(
+                width: 300,
+                height: 300,
+                child: Lottie.asset(
+                  'lottie/empty.json',
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _buildNotesBody(List notes) {
+  return ListView.builder(
+    itemCount: notes.length,
+    itemBuilder: (_, index) {
+      final note = notes[index];
+      // Aqui você pode renderizar o seu note como desejar
+      return ListTile(
+        title: Text(
+          note.title,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ), // Exiba o título da nota
+        subtitle: Text(note.content), // Exiba o conteúdo da nota, se disponível
+        onTap: () {
+          // Aqui você pode adicionar a lógica para abrir uma nota, se necessário
+        },
+      );
+    },
+  );
 }
