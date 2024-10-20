@@ -5,7 +5,6 @@ import 'package:notesapp/app/interactor/actions/notes_actions.dart';
 import 'package:notesapp/app/interactor/atom/notes_atom.dart';
 import 'package:notesapp/app/interactor/models/notes_model.dart';
 import 'package:notesapp/app/theme/theme_constants.dart';
-import 'package:notesapp/app/theme/theme_manager.dart';
 import 'package:notesapp/routes.g.dart';
 import 'package:routefly/routefly.dart';
 
@@ -16,26 +15,11 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-ThemeManager _themeManager = ThemeManager();
-
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
-    _themeManager.addListener(themeListner);
     super.initState();
     fetchnotes();
-  }
-
-  @override
-  void dispose() {
-    _themeManager.removeListener(themeListner);
-    super.dispose();
-  }
-
-  themeListner() {
-    if (mounted) {
-      setState(() {});
-    }
   }
 
   @override
@@ -43,9 +27,8 @@ class _HomePageState extends State<HomePage> {
     return MaterialApp(
       title: 'Notes App',
       debugShowCheckedModeBanner: false,
-      theme: lightTheme,
+      theme: darkTheme,
       darkTheme: darkTheme,
-      themeMode: _themeManager.themeData,
       // Se usar const da ruim com switch
       // ignore: prefer_const_constructors
       home: HomeContent(),
@@ -65,15 +48,10 @@ class HomeContent extends StatelessWidget {
           Row(
             children: [
               IconButton(
-                icon: Icon(
-                  _themeManager.themeData == ThemeMode.dark
-                      ? Icons.wb_sunny // Ícone para tema claro
-                      : Icons.nights_stay, // Ícone para tema escuro
+                icon: const Icon(
+                  Icons.nights_stay,
                 ),
-                onPressed: () {
-                  _themeManager
-                      .toggleTheme(_themeManager.themeData == ThemeMode.light);
-                },
+                onPressed: () {},
               ),
             ],
           )
@@ -154,11 +132,7 @@ Widget _buildNotesBody(BuildContext context, List<NotesModel> notes) {
             note.title,
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
-          subtitle: Text(
-            note.content,
-            maxLines: 3,
-            overflow: TextOverflow.ellipsis,
-          ),
+          subtitle: Text(note.content),
           onTap: () {
             Routefly.push(routePaths.editNote, arguments: note);
           },
@@ -166,6 +140,7 @@ Widget _buildNotesBody(BuildContext context, List<NotesModel> notes) {
             icon: const Icon(Icons.delete),
             onPressed: () {
               _confirmDelete(context, note.id);
+              // Chama a função de confirmação de exclusão
             },
           ),
         ),
@@ -176,9 +151,7 @@ Widget _buildNotesBody(BuildContext context, List<NotesModel> notes) {
 
 void _confirmDelete(BuildContext context, int noteId) async {
   // Exibe o diálogo de confirmação
-
-  // ignore: unused_local_variable
-  final confirm = await showDialog<bool>(
+  await showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
       title: const Text('Confirm Deletion'),
