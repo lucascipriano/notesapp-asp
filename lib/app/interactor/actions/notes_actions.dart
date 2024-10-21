@@ -9,7 +9,6 @@ final fetchnotes = atomAction((set) async {
   final todos = await repository.getAll();
   set(todoState, todos);
 });
-var _autoIncrement = 1; // Começar de 1 ou 0, dependendo da sua lógica
 
 final putAction = atomAction1<NotesModel>((set, model) async {
   final repository = injector.get<NoteRepository>();
