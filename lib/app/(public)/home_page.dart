@@ -1,12 +1,15 @@
 import 'package:asp/asp.dart';
 import 'package:flutter/material.dart';
+import 'package:notesapp/app/data/repositories/theme_nofier.dart';
+import 'package:notesapp/routes.g.dart';
+import 'package:provider/provider.dart'; // Para gerenciar o estado do tema
 import 'package:lottie/lottie.dart';
 import 'package:notesapp/app/interactor/actions/notes_actions.dart';
 import 'package:notesapp/app/interactor/atom/notes_atom.dart';
 import 'package:notesapp/app/interactor/models/notes_model.dart';
-import 'package:notesapp/app/theme/theme_constants.dart';
-import 'package:notesapp/routes.g.dart';
 import 'package:routefly/routefly.dart';
+
+bool isSelected = false;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,52 +22,51 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    fetchnotes();
+    fetchnotes(); // Carrega as notas quando a página é inicializada
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Notes App',
-      debugShowCheckedModeBanner: false,
-      theme: darkTheme,
-      darkTheme: darkTheme,
-      // Se usar const da ruim com switch
-      // ignore: prefer_const_constructors
-      home: HomeContent(),
-    );
+    return const HomeContent(); // Apenas retorna o HomeContent
   }
 }
 
-class HomeContent extends StatelessWidget {
+class HomeContent extends StatefulWidget {
   const HomeContent({super.key});
 
   @override
+  State<HomeContent> createState() => _HomeContentState();
+}
+
+class _HomeContentState extends State<HomeContent> {
+  @override
   Widget build(BuildContext context) {
+    final themeNotifier =
+        Provider.of<ThemeManager>(context); // Acessa o ThemeManager
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Notes'),
         actions: [
-          Row(
-            children: [
-              IconButton(
-                icon: const Icon(
-                  Icons.nights_stay,
-                ),
-                onPressed: () {},
-              ),
-            ],
-          )
+          IconButton(
+            icon: Icon(
+              themeNotifier.isDarkTheme
+                  ? Icons.wb_sunny
+                  : Icons.nights_stay, // Alterna o ícone com base no tema
+            ),
+            onPressed: () {
+              themeNotifier.toggleTheme(); // Alterna o tema
+            },
+          ),
         ],
       ),
       body: AtomBuilder(
         builder: (_, get) {
-          final notes = get(todoState); // Obtém a lista atualizada de notas
+          final notes = get(todoState);
           if (notes.isEmpty) {
-            return _buildEmptyNotesBody(); // Chama a função para notas vazias
+            return _buildEmptyNotesBody();
           } else {
-            return _buildNotesBody(
-                context, notes); // Chama a função para exibir as notas
+            return _buildNotesBody(context, notes);
           }
         },
       ),
@@ -75,8 +77,7 @@ class HomeContent extends StatelessWidget {
           final result =
               await Routefly.push(routePaths.editNote, arguments: newNote);
           if (result != null) {
-            // Aqui, result é a nota que foi salva
-            putAction(result); // Adiciona a nova nota ao estado
+            putAction(result);
           }
         },
         child: const Icon(Icons.add),
@@ -88,7 +89,7 @@ class HomeContent extends StatelessWidget {
 Widget _buildEmptyNotesBody() {
   return Center(
     child: Column(
-      mainAxisAlignment: MainAxisAlignment.center, // Centraliza o conteúdo
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
           margin: const EdgeInsets.only(top: 50),
@@ -125,8 +126,7 @@ Widget _buildNotesBody(BuildContext context, List<NotesModel> notes) {
     itemBuilder: (_, index) {
       final note = notes[index];
       return Container(
-        margin: const EdgeInsets.symmetric(
-            vertical: 8.0), // Espaçamento vertical entre os itens
+        margin: const EdgeInsets.symmetric(vertical: 8.0),
         child: ListTile(
           title: Text(
             note.title,
@@ -140,7 +140,6 @@ Widget _buildNotesBody(BuildContext context, List<NotesModel> notes) {
             icon: const Icon(Icons.delete),
             onPressed: () {
               _confirmDelete(context, note.id);
-              // Chama a função de confirmação de exclusão
             },
           ),
         ),
@@ -163,8 +162,8 @@ void _confirmDelete(BuildContext context, int noteId) async {
         ),
         TextButton(
           onPressed: () {
-            deleteAction(noteId); // Chama a função de exclusão
-            Navigator.of(context).pop(true); // Fecha o diálogo após confirmar
+            deleteAction(noteId);
+            Navigator.of(context).pop(true);
           },
           child: const Text('Delete'),
         ),
