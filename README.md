@@ -1,9 +1,18 @@
 # NotesApp
-É uma POC utilizando alguns pacotes da Flutterando onde, cria um CRUD, lida com rotas e localstorage.
+É uma POC utilizando alguns pacotes da Flutterando onde, cria um CRUD.
+
+## Tecnologias
+- routefly
+- lottie
+- asp
+- shared_preferences
+- auto_injector
+- provider
 
 
-# Mobile
-<video controls src="midia/mobile.mp4" title="Title"></video>
+# Demonstração Desktop
 
-# Desktop
-<video controls src="midia/desktop.mp4" title="Title"></video>
+https://github.com/user-attachments/assets/78e60ec2-3144-48a1-a63b-2093b73b52f2
+
+
+
