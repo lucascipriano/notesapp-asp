@@ -1,15 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:notesapp/app/interactor/actions/notes_actions.dart';
 import 'package:notesapp/app/interactor/models/notes_model.dart';
-import 'package:routefly/routefly.dart';
 
 class EditNotePage extends StatelessWidget {
-  final NotesModel note;
-
-  const EditNotePage({super.key, required this.note});
+  const EditNotePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Utilize ModalRoute para acessar as configurações da rota
+    final settings = ModalRoute.of(context);
+    // Extraia os argumentos como um Map<String, dynamic>
+    final args = settings?.settings.arguments as Map<String, dynamic>?;
+    // Verifique se args não é nulo e extraia a nota
+    final note = args != null ? args['note'] as NotesModel? : null;
+
+    // Se note for null, você pode lidar com isso como preferir
+    if (note == null) {
+      return Scaffold(
+        appBar: AppBar(title: const Text('Error')),
+        body: const Center(child: Text('No note provided')),
+      );
+    }
+
     final titleController = TextEditingController(text: note.title);
     final contentController = TextEditingController(text: note.content);
 
@@ -20,25 +32,22 @@ class EditNotePage extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              // Obtenha os valores dos campos de texto
               final updatedNote = note.copyWith(
                 title: titleController.text,
                 content: contentController.text,
               );
 
               putAction(updatedNote);
-
               Navigator.pop(context);
             },
             icon: const Icon(Icons.save),
           ),
           IconButton(
             onPressed: () async {
-              final confirm = await _alertDelet(context, note.id);
-
+              final confirm = await _alertDelete(context, note.id);
               if (confirm == true) {
-                // ignore: use_build_context_synchronously
-                Routefly.pop(context);
+                deleteAction(note.id);
+                Navigator.pop(context);
               }
             },
             icon: const Icon(Icons.delete),
@@ -78,7 +87,6 @@ class EditNotePage extends StatelessWidget {
                 hintText: "Write Notes",
               ),
             ),
-            // Adicione outros elementos de UI se necessário
           ],
         ),
       ),
@@ -86,7 +94,7 @@ class EditNotePage extends StatelessWidget {
   }
 }
 
-Future<bool?> _alertDelet(BuildContext context, int noteId) async {
+Future<bool?> _alertDelete(BuildContext context, int noteId) async {
   final confirm = await showDialog<bool>(
     context: context,
     builder: (context) => AlertDialog(
@@ -99,9 +107,7 @@ Future<bool?> _alertDelet(BuildContext context, int noteId) async {
         ),
         TextButton(
           onPressed: () {
-            // Fecha o diálogo antes da ação
             Navigator.of(context).pop(true);
-            deleteAction(noteId);
           },
           child: const Text('Delete'),
         ),

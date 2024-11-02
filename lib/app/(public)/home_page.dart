@@ -74,8 +74,9 @@ class _HomeContentState extends State<HomeContent> {
         shape: const CircleBorder(),
         onPressed: () async {
           final newNote = NotesModel(id: -1, title: '', content: '');
-          final result =
-              await Routefly.push(routePaths.editNote, arguments: newNote);
+          final result = await Routefly.push(routePaths.editNote, arguments: {
+            'note': newNote, // Passando a nova nota como argumento
+          });
           if (result != null) {
             putAction(result);
           }
@@ -134,7 +135,10 @@ Widget _buildNotesBody(BuildContext context, List<NotesModel> notes) {
           ),
           subtitle: Text(note.content),
           onTap: () {
-            Routefly.push(routePaths.editNote, arguments: note);
+            Routefly.push(
+              routePaths.editNote,
+              arguments: {'note': note}, // Passando a nota como argumento
+            );
           },
           trailing: IconButton(
             icon: const Icon(Icons.delete),
